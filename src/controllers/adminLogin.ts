@@ -5,7 +5,7 @@ import Admin from "../models/Admin";
 
 export async function AdminLogin(req: Request, res: Response) {
     let userData: any = {
-        email: req.body.email,
+        username: req.body.username,
         password: req.body.password,
     }
     let status = 200
@@ -16,15 +16,15 @@ export async function AdminLogin(req: Request, res: Response) {
     }
     let accessToken = ""
     console.log("userdata: "+JSON.stringify(userData))
-    let userObject = await getDBObject(Admin, { username: userData.email, password: userData.password });
+    let userObject = await getDBObject(Admin, { username: userData.username, password: userData.password });
     if (!userObject) {
         status = 403
         response.error = true
         response.payload = { message: "Unauthorized user" }
     } else {
         let tokenObj = {
-            email: userObject.username,
-            fname: userObject.password
+            username: userObject.username,
+            password: userObject.password
         }
         accessToken = generateAuthToken(tokenObj, process.env.JWT_ACCESS_TOKEN_SECRET || "", parseInt(process.env.TOKEN_EXPIRATION_MIN || "2"))
     }
