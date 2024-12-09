@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { getDBObject } from "../helpers/dbHelpers";
 import { generateAuthToken } from "../helpers/tokenHelpers";
 import User from "../models/User";
+import { PostgresOps } from "../helpers/postgresHelpers";
+import { Constants } from "../contants";
 
 export async function LoginUser(req: Request, res: Response) {
     let userData: any = {
@@ -16,7 +18,9 @@ export async function LoginUser(req: Request, res: Response) {
     }
     let accessToken = ""
     console.log("userdata: "+JSON.stringify(userData))
-    let userObject = await getDBObject(User, { email: userData.email, password: userData.password });
+    // let userObject = await getDBObject(User, { email: userData.email, password: userData.password });
+    let postgres = new PostgresOps();
+    let userObject = await postgres.getUserOrAdminByEmailPassword(userData.email, userData.password, Constants.DB_NAMES.USERS);
     if (!userObject) {
         status = 403
         response.error = true
