@@ -1,6 +1,6 @@
 import express from 'express'
-import { RegisterUser } from '../controllers/userRegistration';
-import { LoginUser } from '../controllers/userLogin';
+import { RegisterUser } from '../controllers/user/userRegistration';
+import { LoginUser } from '../controllers/user/userLogin';
 
 let userRouter = express.Router()
 

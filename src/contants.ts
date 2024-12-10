@@ -1,6 +1,8 @@
 export const Constants = {
     DB_NAMES: {
         USERS: "users",
-        ADMIN: "admin"
+        ADMIN: "admin",
+        PRODUCTS: "products",
+        INVENTORY: "inventory"
     }
 }

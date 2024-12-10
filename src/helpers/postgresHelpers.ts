@@ -1,7 +1,8 @@
 //a function that connect to postgres without sequelize
 import { Pool } from 'pg';
 import _ from 'lodash';
-import { User } from '../models/User';
+import { User } from '../dbStructs/User';
+import { Product } from '../dbStructs/Product';
 
 
 export class PostgresOps {
@@ -63,21 +64,32 @@ export class PostgresOps {
     async insertUser(table: string, userInfo: User) {
         try {
             let result = await this.pool.query(`INSERT INTO ${table} ("EMAIL", "PASSWORD", "NAME", "PINCODE", "ADDRESS") VALUES ($1, $2, $3, $4, $5)`, [userInfo.email, userInfo.password, userInfo.name, userInfo.pincode, userInfo.address]);
-            return result.rows;
+            return result.rowCount;
         } catch (e) {
             throw e;
         }
     }
 
+    async insertProduct(table: string, productInfo: Product) {
+        try {
+            let result = await this.pool.query(`INSERT INTO ${table} ("PID", "PRODUCT_NAME", "CATEGORY", "PRICE", "DESCRIPTION", "IMAGE") VALUES ($1, $2, $3, $4, $5, $6)`, [productInfo.pid, productInfo.productName, productInfo.category, productInfo.price, productInfo.description, productInfo.image]);
+            console.log(result)
+            return result.rowCount;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async insertInventory(table: string, pid: string) {
+        try {
+            let result = await this.pool.query(`INSERT INTO ${table} ("PRODUCT_ID") VALUES ($1)`, [pid]);
+            return result.rowCount;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    closeConnection() {
+        this.pool.end();
+    }
 }
-
-export async function createPostgresConnection() {
-
-}
-
-export async function closePostgresConnection(pool: Pool) {
-    await pool.end();
-}
-
-
-createPostgresConnection();
