@@ -1,7 +1,5 @@
 import { Request, Response } from "express";
-import { getDBObject } from "../../helpers/dbHelpers";
 import { generateAuthToken } from "../../helpers/tokenHelpers";
-import Admin from "../../models/Admin";
 import { PostgresOps } from "../../helpers/postgresHelpers";
 import { Constants } from "../../contants";
 import _ from "lodash";

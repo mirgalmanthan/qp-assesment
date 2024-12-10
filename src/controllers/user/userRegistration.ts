@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { saveDBObject } from "../../helpers/dbHelpers";
 import { PostgresOps } from "../../helpers/postgresHelpers";
 import { Constants } from "../../contants";
 import _ from "lodash";
