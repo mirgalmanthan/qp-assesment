@@ -1,13 +1,9 @@
-import mongoose, { Schema } from "mongoose";
-
-let user = new Schema({
-    email: String, 
-    password: String,
-    name: String, 
-    address: String,
-    pincode: String
-})
-
-let User = mongoose.model("User", user)
-
-export default User;
+export class User {
+    constructor(
+        public name: string,
+        public email: string,
+        public password: string,
+        public address: string,
+        public pincode: string
+    ) { }
+}

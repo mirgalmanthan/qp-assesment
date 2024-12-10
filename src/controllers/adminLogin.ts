@@ -4,6 +4,8 @@ import { generateAuthToken } from "../helpers/tokenHelpers";
 import Admin from "../models/Admin";
 import { PostgresOps } from "../helpers/postgresHelpers";
 import { Constants } from "../contants";
+import _ from "lodash";
+
 
 export async function AdminLogin(req: Request, res: Response) {
     let userData: any = {
@@ -17,22 +19,30 @@ export async function AdminLogin(req: Request, res: Response) {
         payload: {}
     }
     let accessToken = ""
-    console.log("userdata: "+JSON.stringify(userData))
-    // let userObject = await getDBObject(Admin, { username: userData.username, password: userData.password });
-    let postgres = new PostgresOps();
-    let userObject = await postgres.getUserOrAdminByEmailPassword(userData.email, userData.password, Constants.DB_NAMES.ADMIN);
-    if (!userObject) {
-        status = 403
-        response.error = true
-        response.payload = { message: "Unauthorized user" }
-    } else {
-        let tokenObj = {
-            username: userObject.username,
-            password: userObject.password
-        }
-        accessToken = generateAuthToken(tokenObj, process.env.JWT_ACCESS_TOKEN_SECRET || "", parseInt(process.env.TOKEN_EXPIRATION_MIN || "2"))
-    }
-    if (status == 200) return res.json({ error: false, success: true, payload: { accessToken } }).status(status);
-    else return res.status(status).json(response)
+    console.log("userdata: " + JSON.stringify(userData))
+    try {
 
+        // let userObject = await getDBObject(Admin, { username: userData.username, password: userData.password });
+        let postgres = new PostgresOps();
+        let dbResponse = await postgres.getAdminByUsernamePassword(userData.username, userData.password, Constants.DB_NAMES.ADMIN);
+        if (_.isEmpty(dbResponse)) {
+            status = 403
+            response.error = true
+            response.payload = { message: "Unauthorized user" }
+        } else {
+            let userObject = dbResponse;
+            let tokenObj = {
+                username: userObject.username,
+                password: userObject.password
+            }
+            accessToken = generateAuthToken(tokenObj, process.env.JWT_ACCESS_TOKEN_SECRET || "", parseInt(process.env.TOKEN_EXPIRATION_MIN || "2"))
+        }
+        if (status == 200) return res.json({ error: false, success: true, payload: { accessToken } }).status(status);
+        else return res.status(status).json(response)
+    } catch (e) {
+        console.error("ERROR in AdminLogin : "+e)
+        status = 500;
+        response.error = true;
+        return res.send(status).json(response);
+    } 
 }
