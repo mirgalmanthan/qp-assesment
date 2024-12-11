@@ -1,8 +1,8 @@
 import express from 'express';
 import { AdminLogin } from '../controllers/admin/adminLogin';
-import { AddNewProduct as AddNewProduct } from '../controllers/admin/addProduct';
-import { verifyToken } from '../helpers/tokenHelpers';
-import { AddInventory } from '../controllers/admin/addInventory';
+import { AddNewProduct as AddNewProduct, getAllProducts, removeProduct, updateProduct } from '../controllers/products/product';
+import { verifyAdminToken } from '../helpers/tokenHelpers';
+import { AddInventory, GetInventory } from '../controllers/products/inventory';
 
 let adminRouter = express.Router();
 
@@ -15,27 +15,28 @@ adminRouter.post('/forgotPasssowrd', (req, res) => {
     res.status(200).send("Working in Progress")
 });
 
-adminRouter.post('/addNewProduct', verifyToken, async (req, res) => {
+adminRouter.post('/addNewProduct', verifyAdminToken, async (req, res) => {
     await AddNewProduct(req, res);
 });
 
-adminRouter.post('/addInventory', verifyToken, async(req, res) => {
+adminRouter.post('/addInventory', verifyAdminToken, async(req, res) => {
     await AddInventory(req, res);
 })
 
-adminRouter.get('/allProducts', verifyToken, (req, res) => {
-    //implementation pending
-    res.status(200).send("Working in Progress")
+adminRouter.get('/inventory', verifyAdminToken, async (req, res) => {
+    await GetInventory(req, res);
 });
 
-adminRouter.post('/updateProduct', verifyToken, (req, res) => {
-    //implementation pending
-    res.status(200).send("Working in Progress")
+adminRouter.post('/updateProduct', verifyAdminToken, async (req, res) => {
+    await updateProduct(req, res);
 });
 
-adminRouter.post('/deleteProduct', verifyToken, (req, res) => {
-    //implementation pending
-    res.status(200).send("Working in Progress")
+adminRouter.get('/allProducts', verifyAdminToken, async (req, res) => {
+    await getAllProducts(req, res);
+})
+
+adminRouter.delete('/removeProduct', verifyAdminToken, async (req, res) => {
+    await removeProduct(req, res);
 })
 
 export default adminRouter;

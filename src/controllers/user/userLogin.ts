@@ -34,10 +34,12 @@ export async function LoginUser(req: Request, res: Response) {
         } else {
             let userObject = dbResponse;
             let tokenObj = {
-                username: userObject["email"],
-                password: userObject["password"]
+                userId: userObject["UID"],
+                username: userObject["EMAIL"],
+                password: userObject["PASSWORD"]
             }
-            accessToken = generateAuthToken(tokenObj, process.env.JWT_ACCESS_TOKEN_SECRET || "", parseInt(process.env.TOKEN_EXPIRATION_MIN || "2"))
+            console.info(tokenObj)
+            accessToken = generateAuthToken(tokenObj, process.env.JWT_USER_ACCESS_TOKEN_SECRET || "", parseInt(process.env.TOKEN_EXPIRATION_MIN || "2"))
         }
         postgres.closeConnection();
         if (status == 200) return res.json({ error: false, success: true, payload: { accessToken } }).status(status);

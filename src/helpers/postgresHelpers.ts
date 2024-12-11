@@ -35,7 +35,7 @@ export class PostgresOps {
         }
     }
 
-    async getUserByEmailPassword( table: string, email: string, password: string) {
+    async getUserByEmailPassword(table: string, email: string, password: string) {
         let rowFeteched = null;
         try {
             let result = await this.pool.query(`SELECT * FROM ${table} WHERE "EMAIL"=$1 AND "PASSWORD"=$2`, [email, password]);
@@ -80,6 +80,48 @@ export class PostgresOps {
         }
     }
 
+    async getAllProducts(table: string) {
+        try {
+            let result = await this.pool.query(`SELECT * FROM ${table}`);
+            return result.rows;
+        } catch (e) {
+            throw e;
+        }
+    }
+    async updateProduct(table: string, productInfo: Product) {
+        try {
+            // Construct the UPDATE query using parameterized queries to prevent SQL injection.
+            const query = `
+                UPDATE ${table}
+                SET "PRODUCT_NAME" = $1, "CATEGORY" = $2, "PRICE" = $3, "DESCRIPTION" = $4, "IMAGE" = $5
+                WHERE "PID" = $6
+            `;
+            const values = [
+                productInfo.productName,
+                productInfo.category,
+                productInfo.price,
+                productInfo.description,
+                productInfo.image,
+                productInfo.pid,
+            ];
+
+            const result = await this.pool.query(query, values);
+            return result.rowCount;
+        } catch (error) {
+            console.error("Error updating product:", error);
+            throw error; // Re-throw the error to be handled by the calling function.
+        }
+    }
+
+    async removeProduct(table: string, pid: string) {
+        try {
+            let result = await this.pool.query(`DELETE FROM ${table} WHERE "PID"=$1`, [pid]);
+            return result.rowCount;
+        } catch (e) {
+            throw e;
+        }
+    }
+
     async insertInventory(table: string, pid: string) {
         try {
             let result = await this.pool.query(`INSERT INTO ${table} ("PRODUCT_ID") VALUES ($1)`, [pid]);
@@ -89,7 +131,19 @@ export class PostgresOps {
         }
     }
 
+    async getInventory(table: string) {
+        // let query = category ? `SELECT * FROM ${table} WHERE "CATEGORY"=${category}` : `SELECT * FROM ${table}`;
+        let query = `SELECT "PRODUCT_ID", COUNT(*) AS quantity FROM ${table} GROUP BY "PRODUCT_ID";`
+        try {
+            let result = await this.pool.query(query);
+            return result.rows;
+        } catch (e) {
+            throw e;
+        }
+    }
+
     closeConnection() {
         this.pool.end();
     }
 }
+

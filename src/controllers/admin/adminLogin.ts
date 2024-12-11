@@ -35,7 +35,7 @@ export async function AdminLogin(req: Request, res: Response) {
                 username: userObject.username,
                 password: userObject.password
             }
-            accessToken = generateAuthToken(tokenObj, process.env.JWT_ACCESS_TOKEN_SECRET || "", parseInt(process.env.TOKEN_EXPIRATION_MIN || "2"))
+            accessToken = generateAuthToken(tokenObj, process.env.JWT_ADMIN_ACCESS_TOKEN_SECRET || "", parseInt(process.env.TOKEN_EXPIRATION_MIN || "2"))
         }
         postgres.closeConnection();
         if (status == 200) return res.json({ error: false, success: true, payload: { accessToken } }).status(status);
