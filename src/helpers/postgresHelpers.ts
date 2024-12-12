@@ -13,13 +13,6 @@ export class PostgresOps {
         password: process.env.DB_PASSWORD,
         port: parseInt(process.env.DB_PORT || "5432"),
     });
-    // private pool = new Pool({
-    //     user: "postgres",
-    //     host: 'localhost',
-    //     database: "Grocery",
-    //     password: "Manthan@123",
-    //     port: 5432,
-    // });
     constructor() {
         this.pool.connect();
     }
