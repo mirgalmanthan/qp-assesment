@@ -2,7 +2,7 @@ import express from 'express'
 import { RegisterUser } from '../controllers/user/userRegistration';
 import { LoginUser } from '../controllers/user/userLogin';
 import { verifyUserToken } from '../helpers/tokenHelpers';
-import { GetInventory } from '../controllers/products/inventory';
+import { GetInventory, PlaceOrder } from '../controllers/products/inventory';
 
 let userRouter = express.Router()
 
@@ -18,9 +18,8 @@ userRouter.get('/inventory', verifyUserToken, async (req, res) => {
     await GetInventory(req, res);
 });
 
-userRouter.post('/orderItems', (req, res) => {
-    //implementation pending
-    res.status(200).send("Working in Progress")
+userRouter.post('/placeOrder', verifyUserToken, async (req, res) => {
+    await PlaceOrder(req, res);
 });
 
 

@@ -44,8 +44,8 @@ export async function GetInventory(req: Request, res: Response) {
             response.payload = { message: "No products found" }
             response.error = true;
         } else {
-            let allProducts = await postgres.getAllProducts(Constants.DB_NAMES.PRODUCTS);
-            if (_.isEmpty(allProducts)) throw  `Something mismatched in  inventory`;
+            let allProducts = await postgres.getAllItems(Constants.DB_NAMES.PRODUCTS);
+            if (_.isEmpty(allProducts)) throw `Something mismatched in  inventory`;
             let inventory = allProducts.map((e) => {
                 let inventoryProduct = _.find(productsWithQuantity, (prod) => prod.PRODUCT_ID == e.PID);
                 e["quantity"] = inventoryProduct ? inventoryProduct["quantity"] : 0
@@ -59,5 +59,50 @@ export async function GetInventory(req: Request, res: Response) {
     } catch (e) {
         console.log("ERROR @GetInventory: " + e)
         res.send(500).json({ error: true, message: e })
+    }
+}
+
+export async function PlaceOrder(req: Request, res: Response) {
+    console.info("OrderItems invoked");
+    let response = new ApiResponse();
+    let status = 200;
+    console.log(req.body)
+    if (!req.body.items || req.body.items.length < 1) {
+        response.error = true
+        response.payload = { message: "Invalid request" }
+        return res.status(400).json(response)
+    }
+    let items: any[] = req.body.items || [];
+    let userId = req.body.userId;
+    try {
+        let postgres = new PostgresOps();
+        for (let item of items) {
+            for (let i = 0; i < item.quantity; i++) {
+                let getProductItems = await postgres.getInventoryByProductId(Constants.DB_NAMES.INVENTORY, item.pid);
+                console.info("product in Inventory: "+ JSON.stringify(getProductItems))
+                if (_.isEmpty(getProductItems)) {
+                    response.error = true; 
+                    response.payload = { message: `${item.pid} is not available in inventory` }
+                    return res.status(400).json(response)
+                }
+                let orderItemStatus = await postgres.insertOrder(Constants.DB_NAMES.ORDERS, {
+                    pid: item.pid,
+                    uid: userId
+                });
+                let deleteFromInventory = await postgres.removeInventory(Constants.DB_NAMES.INVENTORY, getProductItems.IID);
+                if (!orderItemStatus || !deleteFromInventory) {
+                    throw "Error placing order"
+                }
+            }
+            response.payload = {
+                message: "Order Placed successfully."
+            }
+        }
+        postgres.closeConnection();
+        response.success = true;
+        return res.send(response)
+    } catch (e) {
+        console.log("ERROR @OrderItems: " + e)
+        return res.send(500).json({ error: true, message: e })
     }
 }

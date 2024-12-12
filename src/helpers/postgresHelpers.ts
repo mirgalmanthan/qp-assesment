@@ -7,12 +7,19 @@ import { Product } from '../dbStructs/Product';
 
 export class PostgresOps {
     private pool = new Pool({
-        user: "postgres",
-        host: 'localhost',
-        database: "Grocery",
-        password: "Manthan@123",
-        port: 5432,
+        user: process.env.DB_USERNAME,
+        host: process.env.DB_HOST,
+        database: process.env.DB_NAME,
+        password: process.env.DB_PASSWORD,
+        port: parseInt(process.env.DB_PORT || "5432"),
     });
+    // private pool = new Pool({
+    //     user: "postgres",
+    //     host: 'localhost',
+    //     database: "Grocery",
+    //     password: "Manthan@123",
+    //     port: 5432,
+    // });
     constructor() {
         this.pool.connect();
     }
@@ -80,14 +87,6 @@ export class PostgresOps {
         }
     }
 
-    async getAllProducts(table: string) {
-        try {
-            let result = await this.pool.query(`SELECT * FROM ${table}`);
-            return result.rows;
-        } catch (e) {
-            throw e;
-        }
-    }
     async updateProduct(table: string, productInfo: Product) {
         try {
             // Construct the UPDATE query using parameterized queries to prevent SQL injection.
@@ -130,6 +129,16 @@ export class PostgresOps {
             throw e;
         }
     }
+    
+    async getInventoryByProductId(table: string, pid: string) {
+        try {
+            let query = `SELECT * FROM ${table} WHERE "PRODUCT_ID"=$1`;
+            let result = await this.pool.query(query, [pid]);
+            return result.rows[0];
+        } catch (e) {
+            throw e;
+        }
+    }
 
     async getInventory(table: string) {
         // let query = category ? `SELECT * FROM ${table} WHERE "CATEGORY"=${category}` : `SELECT * FROM ${table}`;
@@ -137,6 +146,24 @@ export class PostgresOps {
         try {
             let result = await this.pool.query(query);
             return result.rows;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async removeInventory(table: string, iid: string) {
+        try {
+            let result = await this.pool.query(`DELETE FROM ${table} WHERE "IID"=$1`, [iid]);
+            return result.rowCount;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async insertOrder(table: string, item: any) {
+        try {
+            let result = await this.pool.query(`INSERT INTO ${table} ("PRODUCT_ID", "USER_ID") VALUES ($1, $2)`, [item.pid, item.uid]);
+            return result.rowCount;
         } catch (e) {
             throw e;
         }

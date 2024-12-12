@@ -3,6 +3,7 @@ export const Constants = {
         USERS: "users",
         ADMIN: "admin",
         PRODUCTS: "products",
-        INVENTORY: "inventory"
+        INVENTORY: "inventory",
+        ORDERS: "orders"
     }
 }

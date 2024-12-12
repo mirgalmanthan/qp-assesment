@@ -77,7 +77,7 @@ export async function getAllProducts(req: Request, res: Response) {
     let status = 200;
     try {
         let postgres = new PostgresOps();
-        let dbResponse: Product[] = await postgres.getAllProducts(Constants.DB_NAMES.PRODUCTS); 
+        let dbResponse: Product[] = await postgres.getAllItems(Constants.DB_NAMES.PRODUCTS); 
 
         if (_.isEmpty(dbResponse)) {
             response.payload = { message: "No products found" };
