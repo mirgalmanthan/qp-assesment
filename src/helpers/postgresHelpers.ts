@@ -144,6 +144,14 @@ export class PostgresOps {
         }
     }
 
+    async getAllInventoryByProductId(table: string, pid: string) {
+        try {
+            let result = await this.pool.query(`SELECT * FROM ${table} WHERE "PRODUCT_ID"=$1`, [pid]);
+            return result.rows;
+        } catch (e) {
+            throw e;
+        }
+    }
     async removeInventory(table: string, iid: string) {
         try {
             let result = await this.pool.query(`DELETE FROM ${table} WHERE "IID"=$1`, [iid]);
@@ -156,6 +164,24 @@ export class PostgresOps {
     async insertOrder(table: string, item: any) {
         try {
             let result = await this.pool.query(`INSERT INTO ${table} ("PRODUCT_ID", "USER_ID") VALUES ($1, $2)`, [item.pid, item.uid]);
+            return result.rowCount;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async allOrdersByProductId(table: string, pid: string) {
+        try {
+            let result = await this.pool.query('SELECT * FROM ${table} WHERE "PRODUCT_ID"=$1', [pid]);
+            return result.rows;
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async cancelOrders(table: string, OID: string) {
+        try {
+            let result = await this.pool.query(`DELETE FROM ${table} WHERE "OID"=$1`, [OID]);
             return result.rowCount;
         } catch (e) {
             throw e;

@@ -56,6 +56,22 @@ export async function removeProduct(req: Request, res: Response) {
     let pid = req.query.pid as string;
     try {
         let postgres = new PostgresOps();
+
+        let inventoryToRemove: any[] = await postgres.getAllInventoryByProductId(Constants.DB_NAMES.INVENTORY, pid);
+        console.log("inventoryToRemove: "+JSON.stringify(inventoryToRemove))
+        if(inventoryToRemove.length > 0) {
+            for(let inventory of inventoryToRemove) { 
+                await postgres.removeInventory(Constants.DB_NAMES.INVENTORY, inventory["IID"]);
+            }
+        }
+
+        let orderToRemove: any[] = await postgres.getAllItems(Constants.DB_NAMES.ORDERS);
+        if(orderToRemove.length > 0) {
+            for(let order of orderToRemove) { 
+                await postgres.cancelOrders(Constants.DB_NAMES.ORDERS, order["OID"]);
+            }
+        }
+        console.log("orderToRemove: "+JSON.stringify(orderToRemove))
         let result = await postgres.removeProduct(Constants.DB_NAMES.PRODUCTS, pid);
         if(result) {
             status = 200
