@@ -1,0 +1,395 @@
+{
+	"info": {
+		"_postman_id": "8eab1e89-6fc5-4290-9076-78488f8f15a9",
+		"name": "Grocery API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22105150"
+	},
+	"item": [
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Login",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/admin/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzM4NTQ3MjksImV4cCI6MTczMzg1NTAyOX0.J0kvFckjrjwuRgICpA3lY-Ngly2bnmbJKySgjDFWS9Y",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"pname\": \"Vim Bar\",\n    \"category\": \"sanitory\",\n    \"price\": 30,\n    \"description\": \"Vim bar 3 in 1 soap.\",\n    \"image\": \"https://m.media-amazon.com/images/I/61dTZuKWMML._AC_UF1000,1000_QL80_.jpg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/admin/addNewProduct",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"addNewProduct"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Inventory",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzQwMjU4NjEsImV4cCI6MTczNDAyNjE2MX0.JLPvk67HoBi5Uv8QuZFTwPdfZZqGsFZJjdiaOgPkX1U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"pid\": \"2293e9d3-1bf1-4ba2-9751-4e3b8e3d7112\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/admin/addInventory",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"addInventory"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Inventory",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzQwMjU4NjEsImV4cCI6MTczNDAyNjE2MX0.JLPvk67HoBi5Uv8QuZFTwPdfZZqGsFZJjdiaOgPkX1U",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/admin/inventory",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"inventory"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzM5MzY3NDAsImV4cCI6MTczMzkzNzA0MH0.1NJYNPQyfuR4VhqhdRM6yBVP_OZkr5SQ3mFQUSEmrk0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/admin/removeProduct?pid=821fdf5b-bd09-458c-8b7b-a3c12694cfa0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"removeProduct"
+							],
+							"query": [
+								{
+									"key": "pid",
+									"value": "821fdf5b-bd09-458c-8b7b-a3c12694cfa0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzM5NDExNDgsImV4cCI6MTczMzk0MTQ0OH0.FQtdStB940wYILcdzvC4l78uTTX9Og1LDscQbyiEeH4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/admin/allProducts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"allProducts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MzM5MzgzNzIsImV4cCI6MTczMzkzODY3Mn0.AL7kaqStx0b4PD6-6kWINQAjSLJQxt5p0VzkHrQ3LKk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"productName\": \"Wheel Bar\",\n    \"pid\": \"2293e9d3-1bf1-4ba2-9751-4e3b8e3d7112\",\n    \"category\": \"sanitory\",\n    \"price\": 40,\n    \"description\": \"Vim bar 3 in 1 soap.\",\n    \"image\": \"https://m.media-amazon.com/images/I/61dTZuKWMML._AC_UF1000,1000_QL80_.jpg\"\n}\n\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/admin/updateProduct",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"updateProduct"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"email\": \"kamu@gmail.com\",\n        \"password\": \"Dau@123\",\n        \"name\": \"Gamu Mirgal\",\n        \"address\": \"Borivali, Mumbai\",\n        \"pincode\": \"400092\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"damu@gmail.com\",\n        \"password\": \"Dau@123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Shop",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2IiwidXNlcm5hbWUiOiJkYW11QGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiRGF1QDEyMyIsImlhdCI6MTczNDAyNTk2MCwiZXhwIjoxNzM0MDI2MjYwfQ.y5x2TxFYmkdlZrlRvK9WK9tSyyHXnC6tmTHFmC4o4tI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/user/inventory",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"inventory"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Place Order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2IiwidXNlcm5hbWUiOiJkYW11QGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiRGF1QDEyMyIsImlhdCI6MTczNDAyNTk2MCwiZXhwIjoxNzM0MDI2MjYwfQ.y5x2TxFYmkdlZrlRvK9WK9tSyyHXnC6tmTHFmC4o4tI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"items\": [\n    {\n        \"pid\": \"81d6000c-7e82-4c1e-bdb1-2cb15caa1644\",\n        \"quantity\": 1\n    },\n    {\n        \"pid\": \"1ea8bb6a-2866-479f-832b-017c14651419\",\n        \"quantity\":1\n    }\n]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/user/placeOrder",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"user",
+								"placeOrder"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
