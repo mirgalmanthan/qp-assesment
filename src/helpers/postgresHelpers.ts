@@ -28,7 +28,7 @@ export class PostgresOps {
 
     async getItemById(table: string, id: number) {
         try {
-            let result = await this.pool.query(`SELECT * FROM ${table} WHERE id = $1`, [id]);
+            let result = await this.pool.query(`SELECT * FROM ${table} WHERE "ID" = $1`, [id]);
             return result.rows[0];
         } catch (e) {
             throw e;
@@ -192,4 +192,3 @@ export class PostgresOps {
         this.pool.end();
     }
 }
-

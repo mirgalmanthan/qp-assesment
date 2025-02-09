@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=Manthan@123
+      - DB_NAME=Grocery
+      - PORT=3000
+      - TOKEN_EXPIRATION_MIN=5
+      - JWT_ADMIN_ACCESS_TOKEN_SECRET=4c85b0bf0223bf73d83a4be054d5276af72ce8a51a05be82bffd9415de6c7b2b3d76ec49a966a1bafb15aa926c61df45c3778f57c422ba55a2b78382c243e767
+      - JWT_USER_ACCESS_TOKEN_SECRET=fc7b2596f37e3d8c3b09ec3fe820b088e101efea8bd228dc9f5a80c37e799509a353a226619de3a89d6ab8af12084f4dccf69503611087e4be7afc3c5fcc1019
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_PASSWORD=Manthan@123
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=Grocery
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+volumes:
+  postgres_data:
