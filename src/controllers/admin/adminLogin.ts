@@ -5,24 +5,77 @@ import { Constants } from "../../contants";
 import _ from "lodash";
 import { ApiResponse } from "../../io/ApiResponse";
 
-
+/**
+ * @swagger
+ * /admin/login:
+ *   get:
+ *     summary: Admin login endpoint
+ *     tags: [Admin]
+ *     description: Authenticate admin user and return JWT token
+ *     parameters:
+ *       - in: query
+ *         name: username
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Admin username
+ *         example: admin
+ *       - in: query
+ *         name: password
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Admin password
+ *         example: admin
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: boolean
+ *                   example: false
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 payload:
+ *                   type: object
+ *                   properties:
+ *                     accessToken:
+ *                       type: string
+ *                       description: JWT token for authentication
+ *       403:
+ *         description: Unauthorized user
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: boolean
+ *                   example: true
+ *                 payload:
+ *                   type: object
+ *                   properties:
+ *                     message:
+ *                       type: string
+ *                       example: Unauthorized user
+ *       500:
+ *         description: Internal server error
+ */
 export async function AdminLogin(req: Request, res: Response) {
     let userData: any = {
-        username: req.body.username,
-        password: req.body.password,
+        username: req.query.username,
+        password: req.query.password,
     }
     let status = 200
-    // let response = {
-    //     error: false,
-    //     success: true,
-    //     payload: {}
-    // }
     let response = new ApiResponse();
     let accessToken = ""
     console.log("userdata: " + JSON.stringify(userData))
     try {
-
-        // let userObject = await getDBObject(Admin, { username: userData.username, password: userData.password });
         let postgres = new PostgresOps();
         let dbResponse = await postgres.getAdminByUsernamePassword(userData.username, userData.password, Constants.DB_NAMES.ADMIN);
         if (_.isEmpty(dbResponse)) {
